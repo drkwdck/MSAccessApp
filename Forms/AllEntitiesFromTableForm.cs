@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MSAccessApp.Persistence;
+using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
@@ -11,7 +12,9 @@ namespace MSAccessApp.Forms
     {
         #region Fields
 
-        private readonly string _connectionStringForDatabase = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\EReshetnikov\Desktop\lab-3.accdb";
+        private readonly IDatabaseProvider _databaseProvider;
+
+        private readonly string _connectionStringForDatabase = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\EReshetnikov\source\repos\MSAccessApp\Persistence\lab-3.accdb";
         private readonly int _listViewWidth = 799;
         private readonly int _listViewHieght = 469;
 
@@ -25,8 +28,9 @@ namespace MSAccessApp.Forms
 
         #region .ctor
 
-        public AllEntitiesFromTableForm()
+        public AllEntitiesFromTableForm(IDatabaseProvider databaseProvider)
         {
+            _databaseProvider = databaseProvider;
             _handleStadiumsGetOnClick = CreateButtonOnClickHandler("Стадион");
             _handleTeamsGetOnClick = CreateButtonOnClickHandler("Команда");
             _handleSportmansGetOnClick = CreateButtonOnClickHandler("Спортсмен");
@@ -48,55 +52,40 @@ namespace MSAccessApp.Forms
         {
             return (sender, args) =>
             {
-                using (var connection = new OleDbConnection(_connectionStringForDatabase))
-                {
-                    try
+                var rows = _databaseProvider.GetRowsFromTable(tableName);
+
+                // Формируем строки для модалки, отображающей выборку
+                var items = rows.AsEnumerable().Where(row => row as DataRow != null)
+                    .Select(dataRow =>
                     {
-                        // Получаем выборку
-                        connection.Open();
-                        var stringQuery = $"SELECT * FROM {tableName}";
-                        OleDbDataAdapter adapter = new OleDbDataAdapter(stringQuery, connection);
-                        var dataSet = new DataSet();
-                        adapter.Fill(dataSet);
+                        var listViewItem = new ListViewItem(dataRow.ItemArray[0]?.ToString());
 
-                        if (dataSet.Tables.Count == 0) { return; }
-
-                        // Формируем строки для модалки, отображающей выборку
-                        var items = dataSet.Tables[0].AsEnumerable().Where(row => row as DataRow != null)
-                            .Select(dataRow =>
-                            {
-                                var listViewItem = new ListViewItem(dataRow.ItemArray[0]?.ToString());
-
-                                if (dataRow.ItemArray.Length > 1)
-                                {
-                                    listViewItem.SubItems.AddRange(dataRow.ItemArray.Skip(1).Select(_ => _?.ToString()).ToArray());
-
-                                }
-
-                                return listViewItem;
-                            })
-                            .ToArray();
-
-                        // Формируем саму модалку
-                        var listVeiw = new ListView();
-                        ListViewInitilze(listVeiw);
-
-                        foreach (var columnName in dataSet.Tables[0].Columns)
+                        if (dataRow.ItemArray.Length > 1)
                         {
-                            listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / dataSet.Tables[0].Columns.Count, HorizontalAlignment.Left);
+                            listViewItem.SubItems.AddRange(dataRow.ItemArray.Skip(1).Select(_ => _?.ToString()).ToArray());
+
                         }
 
-                        listVeiw.Items.AddRange(items);
+                        return listViewItem;
+                    })
+                    .ToArray();
 
-                        Controls.Add(listVeiw);
-                        // Ставим фокус на модалку, чтобы закрыть её при потере фокуса
-                        listVeiw.Focus();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"Ошибка во время получения списка записей из таблицы {tableName} {e.Message}");
-                    }
+                // Формируем саму модалку
+                var listVeiw = new ListView();
+                ListViewInitilze(listVeiw);
+
+                var columns = _databaseProvider.GetColumnsFromTable(tableName);
+
+                foreach (var columnName in columns)
+                {
+                    listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / columns.Count, HorizontalAlignment.Left);
                 }
+
+                listVeiw.Items.AddRange(items);
+
+                Controls.Add(listVeiw);
+                // Ставим фокус на модалку, чтобы закрыть её при потере фокуса
+                listVeiw.Focus();
             };
         }
 
