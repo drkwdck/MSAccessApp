@@ -14,7 +14,6 @@ namespace MSAccessApp.Forms
 
         private readonly IDatabaseProvider _databaseProvider;
 
-        private readonly string _connectionStringForDatabase = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\EReshetnikov\source\repos\MSAccessApp\Persistence\lab-3.accdb";
         private readonly int _listViewWidth = 799;
         private readonly int _listViewHieght = 469;
 

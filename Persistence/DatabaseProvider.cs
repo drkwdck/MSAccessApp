@@ -12,7 +12,7 @@ namespace MSAccessApp.Persistence
         /// <inheritdoc />
         public IEnumerable<DataRow> GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null)
         {
-            var connectionsString = ConfigurationManager.ConnectionStrings[0];
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
             using (var connection = new OleDbConnection(connectionsString.ConnectionString))
             {
@@ -44,12 +44,23 @@ namespace MSAccessApp.Persistence
             {
                 try
                 {
-                    var table = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new[] { null, null, null, "TABLE" });
-                    var a = table.Columns;
+                    connection.Open();
+                    var schemaTable = connection.GetOleDbSchemaTable(
+                      OleDbSchemaGuid.Columns,
+                      new Object[] { null, null, tableName });
+
+                    if (schemaTable == null)
+                    {
+                        return new List<string>();
+                    }
+
+                    var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
+
+                    return (from DataRow row in schemaTable.Rows select row.ItemArray[columnOrdinalForName]?.ToString()).ToList();
                 }
                 catch (Exception e)
                 {
-
+                    Console.WriteLine($"Ошибка получения списка столбцов таблицы {tableName}: {e.Message}");
                 }
             }
 

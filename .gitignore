@@ -3,6 +3,7 @@
 
 # Package files
 *.jar
+**/[Pp]ackages/*
 
 # JetBrains IDE
 .idea/
