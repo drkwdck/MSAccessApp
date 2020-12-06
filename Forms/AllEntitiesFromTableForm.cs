@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MSAccessApp
+namespace MSAccessApp.Forms
 {
-    public partial class Form1 : Form
+    public partial class AllEntitiesFromTableForm : Form
     {
         #region Fields
 
@@ -29,7 +25,7 @@ namespace MSAccessApp
 
         #region .ctor
 
-        public Form1()
+        public AllEntitiesFromTableForm()
         {
             _handleStadiumsGetOnClick = CreateButtonOnClickHandler("Стадион");
             _handleTeamsGetOnClick = CreateButtonOnClickHandler("Команда");

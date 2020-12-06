@@ -1,6 +1,6 @@
-﻿namespace MSAccessApp
+﻿namespace MSAccessApp.Forms
 {
-    partial class Form1
+    partial class AllEntitiesFromTableForm
     {
         /// <summary>
         /// Required designer variable.
