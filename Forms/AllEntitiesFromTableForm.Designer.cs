@@ -13,10 +13,17 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
+            button1.Click -= _handleStadiumsGetOnClick;
+            button2.Click -= _handleTeamsGetOnClick;
+            button3.Click -= _handleSportmansGetOnClick;
+            button4.Click -= _handleResultsGetOnClick;
+            button5.Click += _handleSportTypeGetOnClick;
+
             if (disposing && (components != null))
             {
                 components.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -43,27 +50,27 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Стадионы";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this._handleStadiumsGetOnClick);
+            this.button1.Click += _handleStadiumsGetOnClick;
             // 
             // button2
             // 
             this.button2.Location = new System.Drawing.Point(269, 30);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(119, 51);
-            this.button2.TabIndex = 1;
+            this.button2.TabIndex = 0;
             this.button2.Text = "Команды";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this._handleTeamsGetOnClick);
+            this.button2.Click += _handleTeamsGetOnClick;
             // 
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(467, 30);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(135, 51);
-            this.button3.TabIndex = 2;
+            this.button3.TabIndex = 0;
             this.button3.Text = "Спортсмены";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this._handleSportmansGetOnClick);
+            this.button3.Click += _handleSportmansGetOnClick;
 
             // 
             // button4
@@ -71,20 +78,20 @@
             this.button4.Location = new System.Drawing.Point(677, 30);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(113, 50);
-            this.button4.TabIndex = 3;
+            this.button4.TabIndex = 0;
             this.button4.Text = "Результаты";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this._handleResultsGetOnClick);
+            this.button4.Click += _handleResultsGetOnClick;
             // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(843, 31);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(114, 50);
-            this.button5.TabIndex = 4;
+            this.button5.TabIndex = 0;
             this.button5.Text = "Виды спорта";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this._handleSportTypeGetOnClick);
+            this.button5.Click += _handleSportTypeGetOnClick;
             // 
             // Form1
             // 
@@ -98,9 +105,8 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Лаба по бд";
+            this.Text = "Вывод строк таблиц";
             this.ResumeLayout(false);
-
         }
 
         #endregion

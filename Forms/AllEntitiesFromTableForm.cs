@@ -1,7 +1,6 @@
 ﻿using MSAccessApp.Persistence;
 using System;
 using System.Data;
-using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,11 +16,11 @@ namespace MSAccessApp.Forms
         private readonly int _listViewWidth = 799;
         private readonly int _listViewHieght = 469;
 
-        private Action<object, EventArgs> _handleStadiumsGetOnClick;
-        private Action<object, EventArgs> _handleTeamsGetOnClick;
-        private Action<object, EventArgs> _handleSportmansGetOnClick;
-        private Action<object, EventArgs> _handleResultsGetOnClick;
-        private Action<object, EventArgs> _handleSportTypeGetOnClick;
+        private EventHandler _handleStadiumsGetOnClick;
+        private EventHandler _handleTeamsGetOnClick;
+        private EventHandler _handleSportmansGetOnClick;
+        private EventHandler _handleResultsGetOnClick;
+        private EventHandler _handleSportTypeGetOnClick;
 
         #endregion
 
@@ -47,7 +46,7 @@ namespace MSAccessApp.Forms
         /// </summary>
         /// <param name="tableName">Имя таблицы, для которой нужно получить выборку</param>
         /// <returns></returns>
-        private Action<object, EventArgs> CreateButtonOnClickHandler(string tableName)
+        private EventHandler CreateButtonOnClickHandler(string tableName)
         {
             return (sender, args) =>
             {

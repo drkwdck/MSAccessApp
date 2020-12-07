@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.Extensions.DependencyInjection;
-using MSAccessApp.Forms;
+﻿using MSAccessApp.Forms;
 using MSAccessApp.Persistence;
+using System;
+using System.Windows.Forms;
 
 namespace MSAccessApp
 {
@@ -17,11 +13,11 @@ namespace MSAccessApp
         [STAThread]
         static void Main()
         {
-            var dbProvider = new DatabaseProvider();
+            var dbProvider = DatabaseProvider.Get();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AllEntitiesFromTableForm(dbProvider));
+            Application.Run(new StartMenu(dbProvider));
         }
 
     }
