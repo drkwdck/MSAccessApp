@@ -70,9 +70,10 @@ namespace MSAccessApp.Forms
                 _addEntityButton.Show();
                 var groupBox = new GroupBox();
                 groupBox.Text = "Заполните поля новой записи";
-                var columns = _dataBaseProvider.GetTableColumnsWithTypes(button.Name).Keys;
+                var columns = _dataBaseProvider.GetTableColumnsWithTypes(button.Name).Keys.ToArray();
+                Array.Sort(columns);
                 groupBox.Location = new Point(300, 70);
-                groupBox.Size = new Size(320, (columns.Count) * 40 + 40);
+                groupBox.Size = new Size(320, (columns.Length) * 40 + 40);
 
                 var y = 20;
 
@@ -95,15 +96,26 @@ namespace MSAccessApp.Forms
         {
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
             var values = new string[_currentInputs.Controls.Count];
-            var columns = _dataBaseProvider.GetTableColumnsWithTypes(tableName).Keys.ToArray();
+            var typeOnColumns = _dataBaseProvider.GetTableColumnsWithTypes(tableName);
+            var columns = typeOnColumns.Keys.ToArray();
+            Array.Sort(columns);
+            var isValid = true;
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {
-               values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text);
+               values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text, typeOnColumns[columns[i]]);
+                isValid &= !string.IsNullOrEmpty(values[i]);
                 _currentInputs.Controls[i].Text = columns[i];
             }
 
-            _dataBaseProvider.AddRowToTable(tableName, values);
+            if (isValid)
+            {
+                _dataBaseProvider.AddRowToTable(tableName, values);
+            }
+            else
+            {
+                MessageBox.Show("Вы ввели невалидное значение");
+            }
         }
     }
 }

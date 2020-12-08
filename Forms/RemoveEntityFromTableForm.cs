@@ -2,6 +2,7 @@
 using MSAccessApp.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -86,9 +87,13 @@ namespace MSAccessApp.Forms
         {
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
 
-            var parsed = Parser.GetValueFromInput(_inputEntityId.Controls[0].Text);
-
-            if (int.TryParse(parsed, out var number))
+            var parsed = Parser.GetValueFromInput(_inputEntityId.Controls[0].Text, OleDbType.Guid);
+            
+            if (string.IsNullOrEmpty(parsed))
+            {
+                MessageBox.Show("Вы ввели невалидное значение");
+            }
+            else
             {
                 _databaseProvider.RemoveRowFromTable(tableName, parsed);
             }

@@ -95,7 +95,6 @@
       <DependentUpon>StartMenu.cs</DependentUpon>
     </Compile>
     <Compile Include="Modules\Parser.cs" />
-    <Compile Include="Persistence\ColumnDataType.cs" />
     <Compile Include="Persistence\IDatabaseProvider.cs" />
     <Compile Include="Persistence\DatabaseProvider.cs" />
     <Compile Include="Program.cs" />

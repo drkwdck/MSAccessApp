@@ -127,8 +127,6 @@ namespace MSAccessApp.Persistence
                         var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
                         var columnOrdinalForType = schemaTable.Columns["DATA_TYPE"].Ordinal;
 
-                        var columns = (from DataRow row in schemaTable.Rows select row.ItemArray[columnOrdinalForName]?.ToString()).ToList();
-
                         foreach(var row in schemaTable.Rows)
                         {
                             var dataRow = row as DataRow;

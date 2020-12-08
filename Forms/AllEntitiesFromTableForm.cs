@@ -99,11 +99,12 @@ namespace MSAccessApp.Forms
                 var listVeiw = new ListView();
                 ListViewInitilze(listVeiw);
 
-                var columns = _databaseProvider.GetTableColumnsWithTypes(tableName).Keys;
+                var columns = _databaseProvider.GetTableColumnsWithTypes(tableName).Keys.ToArray();
+                Array.Sort(columns);
 
                 foreach (var columnName in columns)
                 {
-                    listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / columns.Count, HorizontalAlignment.Left);
+                    listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / columns.Length, HorizontalAlignment.Left);
                 }
 
                 listVeiw.Items.AddRange(items);
