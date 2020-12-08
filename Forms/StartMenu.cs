@@ -20,10 +20,12 @@ namespace MSAccessApp.Forms
 
             if (button == null) { return; }
 
+            // TODO вычислять имена кнопок налету через nameof([класс формы])
             Form form = button.Name switch
             {
                 "AllEntitiesFromTableFormButton" => new AllEntitiesFromTableForm(_databaseProvider),
                 "AddEntityFormButton" => new AddEntityForm(_databaseProvider),
+                "RemoveEntityFromTableFormButton" => new RemoveEntityFromTableForm(_databaseProvider),
                 _ => null
             };
 

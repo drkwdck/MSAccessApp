@@ -172,6 +172,41 @@ namespace MSAccessApp.Persistence
             }
         }
 
+        public void RemoveRowFromTable(string tableName, string id)
+        {
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+
+            using (var connection = new OleDbConnection(connectionsString))
+            {
+                try
+                {
+                    lock (_syncRoot)
+                    {
+                        connection.Open();
+                        var cmd = new OleDbCommand();
+                        cmd.Connection = connection;
+
+                        DataTable schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys,
+                        new object[] { null, null, tableName });
+
+                        var keyColumn = schemaTable.Rows[0][3];
+
+                        var stringQuery = $"DELETE FROM {tableName}  WHERE [{keyColumn}]={id}";
+                        cmd.CommandText = stringQuery;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Ошибка во время удаления записи из таблицы {tableName}: {e.Message}");
+                }
+                finally
+                {
+                    connection?.Close();
+                }
+            }
+        }
+
         #endregion
     }
 }
