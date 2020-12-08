@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 
 namespace MSAccessApp.Persistence
 {
@@ -22,9 +23,9 @@ namespace MSAccessApp.Persistence
         IEnumerable<DataRow> GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null);
 
         /// <summary>
-        /// Получить список названий колонок таблицы
+        /// Получить список названий колонок таблицы и тип данных в них
         /// </summary>
-        List<string> GetColumnsFromTable(string tableName);
+        Dictionary<string, OleDbType> GetTableColumnsWithTypes(string tableName);
 
         /// <summary>
         /// Добавить запись в таблицу

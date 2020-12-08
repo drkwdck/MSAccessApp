@@ -70,7 +70,7 @@ namespace MSAccessApp.Forms
                 _addEntityButton.Show();
                 var groupBox = new GroupBox();
                 groupBox.Text = "Заполните поля новой записи";
-                var columns = _dataBaseProvider.GetColumnsFromTable(button.Name);
+                var columns = _dataBaseProvider.GetTableColumnsWithTypes(button.Name).Keys;
                 groupBox.Location = new Point(300, 70);
                 groupBox.Size = new Size(320, (columns.Count) * 40 + 40);
 
@@ -95,7 +95,7 @@ namespace MSAccessApp.Forms
         {
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
             var values = new string[_currentInputs.Controls.Count];
-            var columns = _dataBaseProvider.GetColumnsFromTable(tableName);
+            var columns = _dataBaseProvider.GetTableColumnsWithTypes(tableName).Keys.ToArray();
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {

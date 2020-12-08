@@ -99,7 +99,7 @@ namespace MSAccessApp.Forms
                 var listVeiw = new ListView();
                 ListViewInitilze(listVeiw);
 
-                var columns = _databaseProvider.GetColumnsFromTable(tableName);
+                var columns = _databaseProvider.GetTableColumnsWithTypes(tableName).Keys;
 
                 foreach (var columnName in columns)
                 {

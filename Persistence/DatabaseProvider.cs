@@ -103,9 +103,10 @@ namespace MSAccessApp.Persistence
         }
 
         /// <inheritdoc />
-        public List<string> GetColumnsFromTable(string tableName)
+        public Dictionary<string, OleDbType> GetTableColumnsWithTypes(string tableName)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+            var result = new Dictionary<string, OleDbType>();
 
             using (var connection = new OleDbConnection(connectionsString))
             {
@@ -120,13 +121,22 @@ namespace MSAccessApp.Persistence
 
                         if (schemaTable == null)
                         {
-                            return new List<string>();
+                            return result;
                         }
 
-
                         var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
+                        var columnOrdinalForType = schemaTable.Columns["DATA_TYPE"].Ordinal;
 
-                        return (from DataRow row in schemaTable.Rows select row.ItemArray[columnOrdinalForName]?.ToString()).ToList();
+                        var columns = (from DataRow row in schemaTable.Rows select row.ItemArray[columnOrdinalForName]?.ToString()).ToList();
+
+                        foreach(var row in schemaTable.Rows)
+                        {
+                            var dataRow = row as DataRow;
+
+                            if (dataRow == null) { continue; }
+
+                            result[dataRow.ItemArray[columnOrdinalForName].ToString()] = dataRow.ItemArray[columnOrdinalForType] as OleDbType? ?? OleDbType.IUnknown;
+                        }
                     }
                 }
                 catch (Exception e)
@@ -139,7 +149,7 @@ namespace MSAccessApp.Persistence
                 }
             }
 
-            return new List<string>();
+            return result;
         }
 
 
