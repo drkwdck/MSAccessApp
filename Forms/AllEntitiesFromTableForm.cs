@@ -1,5 +1,6 @@
 ﻿using MSAccessApp.Persistence;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -15,12 +16,7 @@ namespace MSAccessApp.Forms
 
         private readonly int _listViewWidth = 799;
         private readonly int _listViewHieght = 469;
-
-        private EventHandler _handleStadiumsGetOnClick;
-        private EventHandler _handleTeamsGetOnClick;
-        private EventHandler _handleSportmansGetOnClick;
-        private EventHandler _handleResultsGetOnClick;
-        private EventHandler _handleSportTypeGetOnClick;
+        private readonly Dictionary<Button, EventHandler> _clickHandlerOnButton = new Dictionary<Button, EventHandler>();
 
         #endregion
 
@@ -29,17 +25,48 @@ namespace MSAccessApp.Forms
         public AllEntitiesFromTableForm(IDatabaseProvider databaseProvider)
         {
             _databaseProvider = databaseProvider;
-            _handleStadiumsGetOnClick = CreateButtonOnClickHandler("Стадион");
-            _handleTeamsGetOnClick = CreateButtonOnClickHandler("Команда");
-            _handleSportmansGetOnClick = CreateButtonOnClickHandler("Спортсмен");
-            _handleResultsGetOnClick = CreateButtonOnClickHandler("Результат");
-            _handleSportTypeGetOnClick = CreateButtonOnClickHandler("Вид_спорта");
             InitializeComponent();
+            InitializeSelectTableButtons();
         }
 
         #endregion
 
         #region Private methods
+
+
+        /// <summary>
+        /// Создает кнопки для показа содержиого таблиц и ставит на них обработчики
+        /// </summary>
+        private void InitializeSelectTableButtons()
+        {
+            var x = 20;
+            var y = 20;
+            var buttonCounter = 0;
+
+            foreach(var tableTitle in _databaseProvider.GetTables())
+            {
+                var showTableButton = new Button();
+                showTableButton.Text = tableTitle;
+                showTableButton.Location = new Point(x, y);
+                showTableButton.Size = new Size(_listViewWidth / 5, 40);
+
+                var onButtonClickHandler = CreateButtonOnClickHandler(tableTitle);
+                showTableButton.Click += onButtonClickHandler;
+                _clickHandlerOnButton[showTableButton] = onButtonClickHandler;
+
+                Controls.Add(showTableButton);
+                showTableButton.Show();
+
+                x += (_listViewWidth / 5) + 50;
+
+                // В строку влезает 5 кнопок
+                if (++buttonCounter % 5 == 0)
+                {
+                    y += 50;
+                    x = 20;
+                }
+            }
+        }
 
         /// <summary>
         /// Фабрика обработчиков кликов по кнопкам
@@ -97,7 +124,7 @@ namespace MSAccessApp.Forms
             listView.View = View.Details;
             listView.FullRowSelect = true;
             listView.GridLines = true;
-            listView.Location = new Point(69, 89);
+            listView.Location = new Point(69, 150);
             listView.Size = new Size(_listViewWidth, _listViewHieght);
             listView.LostFocus += HandleLostFocus;
 

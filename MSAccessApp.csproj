@@ -96,6 +96,9 @@
     <EmbeddedResource Include="Forms\AddEntityForm.resx">
       <DependentUpon>AddEntityForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AllEntitiesFromTableForm.resx">
+      <DependentUpon>AllEntitiesFromTableForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartMenu.resx">
       <DependentUpon>StartMenu.cs</DependentUpon>
     </EmbeddedResource>
