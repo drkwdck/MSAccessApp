@@ -35,7 +35,6 @@ namespace MSAccessApp.Forms
         {
             this.AllEntitiesFromTableFormButton = new System.Windows.Forms.Button();
             this.AddEntityFormButton = new System.Windows.Forms.Button();
-            this.RemoveEntityFromTableFormButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AllEntitiesFromTableFormButton
@@ -58,22 +57,11 @@ namespace MSAccessApp.Forms
             this.AddEntityFormButton.UseVisualStyleBackColor = true;
             this.AddEntityFormButton.Click += HadnleOpenFormClick;
             // 
-            // RemoveEntityFromTableFormButton
-            // 
-            this.RemoveEntityFromTableFormButton.Location = new System.Drawing.Point(396, 46);
-            this.RemoveEntityFromTableFormButton.Name = "RemoveEntityFromTableFormButton";
-            this.RemoveEntityFromTableFormButton.Size = new System.Drawing.Size(140, 59);
-            this.RemoveEntityFromTableFormButton.TabIndex = 2;
-            this.RemoveEntityFromTableFormButton.Text = "Удалить запись из таблицы";
-            this.RemoveEntityFromTableFormButton.UseVisualStyleBackColor = true;
-            this.RemoveEntityFromTableFormButton.Click += HadnleOpenFormClick;
-            // 
             // StartMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.RemoveEntityFromTableFormButton);
             this.Controls.Add(this.AddEntityFormButton);
             this.Controls.Add(this.AllEntitiesFromTableFormButton);
             this.Name = "StartMenu";
@@ -86,6 +74,5 @@ namespace MSAccessApp.Forms
 
         private System.Windows.Forms.Button AllEntitiesFromTableFormButton;
         private System.Windows.Forms.Button AddEntityFormButton;
-        private System.Windows.Forms.Button RemoveEntityFromTableFormButton;
     }
 }

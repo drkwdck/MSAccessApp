@@ -1,5 +1,4 @@
-﻿using MSAccessApp.Modules;
-using MSAccessApp.Persistence;
+﻿using MSAccessApp.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -75,7 +74,6 @@ namespace MSAccessApp.Forms
                 groupBox.Size = new Size(320, (columns.Count) * 40 + 40);
 
                 var y = 20;
-
                 foreach (var column in columns)
                 {
                     var input = new TextBox();
@@ -99,7 +97,17 @@ namespace MSAccessApp.Forms
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {
-               values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text);
+                var parsedInput = _currentInputs.Controls[i].Text.Split(':');
+
+                if (parsedInput.Length > 1)
+                {
+                    values[i] = string.Join("", parsedInput.Skip(1).ToList());
+                }
+                else
+                {
+                    values[i] = _currentInputs.Controls[i].Text;
+                }
+
                 _currentInputs.Controls[i].Text = columns[i];
             }
 
