@@ -152,7 +152,7 @@ namespace MSAccessApp.Persistence
 
 
         /// <inheritdoc />
-        public void AddRowToTable(string tableName, string[] values)
+        public bool AddRowToTable(string tableName, string[] values)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
 
@@ -172,15 +172,18 @@ namespace MSAccessApp.Persistence
                 catch (Exception e)
                 {
                     Console.WriteLine($"Ошибка во время добавления записи в таблицу {tableName}: {e.Message}");
+                    return false;
                 }
                 finally
                 {
                     connection?.Close();
                 }
             }
+
+            return true;
         }
 
-        public void RemoveRowFromTable(string tableName, string id)
+        public bool RemoveRowFromTable(string tableName, string id)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
 
@@ -199,7 +202,14 @@ namespace MSAccessApp.Persistence
 
                         var keyColumn = schemaTable.Rows[0][3];
 
-                        var stringQuery = $"DELETE FROM {tableName}  WHERE [{keyColumn}]={id}";
+                        var stringQuery = $"SELECT * FROM {tableName} WHERE [{keyColumn}]={id}";
+                        var adapter = new OleDbDataAdapter(stringQuery, connection);
+                        var dataSet = new DataSet();
+                        adapter.Fill(dataSet);
+
+                        if (dataSet.Tables[0].Rows.Count == 0) { return false; }
+
+                        stringQuery = $"DELETE FROM {tableName}  WHERE [{keyColumn}]={id}";
                         cmd.CommandText = stringQuery;
                         cmd.ExecuteNonQuery();
                     }
@@ -207,12 +217,15 @@ namespace MSAccessApp.Persistence
                 catch (Exception e)
                 {
                     Console.WriteLine($"Ошибка во время удаления записи из таблицы {tableName}: {e.Message}");
+                    return false;
                 }
                 finally
                 {
                     connection?.Close();
                 }
             }
+
+            return true;
         }
 
         #endregion

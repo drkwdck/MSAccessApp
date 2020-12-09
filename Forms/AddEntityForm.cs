@@ -99,22 +99,27 @@ namespace MSAccessApp.Forms
             var typeOnColumns = _dataBaseProvider.GetTableColumnsWithTypes(tableName);
             var columns = typeOnColumns.Keys.ToArray();
             Array.Sort(columns);
-            var isValid = true;
+            var success = true;
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {
                values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text, typeOnColumns[columns[i]]);
-                isValid &= !string.IsNullOrEmpty(values[i]);
+                success &= !string.IsNullOrEmpty(values[i]);
                 _currentInputs.Controls[i].Text = columns[i];
             }
 
-            if (isValid)
+            if (success)
             {
-                _dataBaseProvider.AddRowToTable(tableName, values);
+                success &= _dataBaseProvider.AddRowToTable(tableName, values);
+            }
+
+            if (success)
+            {
+                MessageBox.Show("Запись успешно добавлена.");
             }
             else
             {
-                MessageBox.Show("Вы ввели невалидное значение");
+                MessageBox.Show("Запись добавлена не была. Попробуйте снова.");
             }
         }
     }

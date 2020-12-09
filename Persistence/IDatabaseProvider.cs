@@ -32,11 +32,11 @@ namespace MSAccessApp.Persistence
         /// </summary>
         /// <param name="tableName"></param>
         /// <param name="values">значения полей записи (порядок должен соответсвовать столбцам)</param>
-        void AddRowToTable(string tableName, string[] values);
+        bool AddRowToTable(string tableName, string[] values);
 
         /// <summary>
         /// Удалить запись из таблицы по первичному ключу
         /// </summary>
-        void RemoveRowFromTable(string tableName, string id);
+        bool RemoveRowFromTable(string tableName, string id);
     }
 }

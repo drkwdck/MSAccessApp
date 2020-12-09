@@ -95,7 +95,14 @@ namespace MSAccessApp.Forms
             }
             else
             {
-                _databaseProvider.RemoveRowFromTable(tableName, parsed);
+                if(!_databaseProvider.RemoveRowFromTable(tableName, parsed))
+                {
+                    MessageBox.Show("Запись удалена не была. Попробуйте снова.");
+                }
+                else
+                {
+                    MessageBox.Show("Запись удалена.");
+                }
             }
 
             _inputEntityId.Controls[0].Text = "";
