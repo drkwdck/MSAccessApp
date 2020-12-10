@@ -19,13 +19,14 @@ namespace MSAccessApp.Persistence
         /// <summary>
         /// Получить строки из таблицы и колонки, соответсвующие им.
         /// Если фильтр не задан, возвращает все записи
+        /// ВАЖНО: колонки в таком же порядке, как в таблице
         /// </summary>
         (IEnumerable<DataRow> rows, List<string> columns) GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null);
 
         /// <summary>
         /// Получить список названий колонок таблицы и тип данных в них
         /// </summary>
-        Dictionary<string, OleDbType> GetTableColumnsWithTypes(string tableName);
+        Dictionary<string, Type> GetTableColumnsWithTypes(string tableName);
 
         /// <summary>
         /// Добавить запись в таблицу

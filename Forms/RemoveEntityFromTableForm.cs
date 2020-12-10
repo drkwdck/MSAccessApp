@@ -87,7 +87,7 @@ namespace MSAccessApp.Forms
         {
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
 
-            var parsed = Parser.GetValueFromInput(_inputEntityId.Controls[0].Text, OleDbType.Guid);
+            var parsed = Parser.GetValueFromInput(_inputEntityId.Controls[0].Text, typeof(int));
             
             if (string.IsNullOrEmpty(parsed))
             {

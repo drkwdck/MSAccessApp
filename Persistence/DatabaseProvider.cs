@@ -110,10 +110,10 @@ namespace MSAccessApp.Persistence
         }
 
         /// <inheritdoc />
-        public Dictionary<string, OleDbType> GetTableColumnsWithTypes(string tableName)
+        public Dictionary<string, Type> GetTableColumnsWithTypes(string tableName)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
-            var result = new Dictionary<string, OleDbType>();
+            var result = new Dictionary<string, Type>();
 
             using (var connection = new OleDbConnection(connectionsString))
             {
@@ -122,25 +122,14 @@ namespace MSAccessApp.Persistence
                     lock (_syncRoot)
                     {
                         connection.Open();
-                        var schemaTable = connection.GetOleDbSchemaTable(
-                          OleDbSchemaGuid.Columns,
-                          new Object[] { null, null, tableName });
+                        var stringQuery = $"SELECT * FROM [{tableName}]";
+                        var adapter = new OleDbDataAdapter(stringQuery, connection);
+                        var dataSet = new DataSet();
+                        adapter.Fill(dataSet);
 
-                        if (schemaTable == null)
+                        foreach (DataColumn column in dataSet.Tables[0].Columns)
                         {
-                            return result;
-                        }
-
-                        var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
-                        var columnOrdinalForType = schemaTable.Columns["DATA_TYPE"].Ordinal;
-
-                        foreach(var row in schemaTable.Rows)
-                        {
-                            var dataRow = row as DataRow;
-
-                            if (dataRow == null) { continue; }
-
-                            result[dataRow.ItemArray[columnOrdinalForName].ToString()] = dataRow.ItemArray[columnOrdinalForType] as OleDbType? ?? OleDbType.IUnknown;
+                            result[column.ToString()] = column.DataType;
                         }
                     }
                 }
@@ -171,6 +160,7 @@ namespace MSAccessApp.Persistence
                     {
                         connection.Open();
                         var cmd = new OleDbCommand();
+
                         cmd.Connection = connection;
                         cmd.CommandText = $"INSERT INTO [{tableName}] VALUES({string.Join(", ", values)})";
                         cmd.ExecuteNonQuery();
@@ -289,10 +279,10 @@ namespace MSAccessApp.Persistence
                             if (string.IsNullOrEmpty(values[i])) { continue; }
                             if (i == keyIndex) { continue; }
 
-                            setString += $"[{columns[i]}]="
-                                + (Parser.OleDbTypeToNetType(typeOfColumns[columns[i]]) == typeof(string)
-                                    ? $"'{values[i]}', "
-                                    : $"{values[i]}, ");
+                            if (dataSet.Tables[0].Columns[i].DataType == typeof(string))
+                            {
+                                values[i] = "'" + values[i] + "'";
+                            }
                         }
 
                         if (string.IsNullOrEmpty(setString))
