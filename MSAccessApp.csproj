@@ -76,6 +76,12 @@
     <Compile Include="Forms\AllEntitiesFromTableForm.Designer.cs">
       <DependentUpon>AllEntitiesFromTableForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EditEntityFromTableForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditEntityFromTableForm.Designer.cs">
+      <DependentUpon>EditEntityFromTableForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EditRowFromTableForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -2,36 +2,39 @@
 using MSAccessApp.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace MSAccessApp.Forms
 {
-    public partial class AddEntityForm : Form
+    public partial class EditEntityFromTableForm : Form
     {
-        private readonly IDatabaseProvider _dataBaseProvider;
+
+        private readonly IDatabaseProvider _databaseProvider;
 
         private List<RadioButton> _tablesRadioButtons = new List<RadioButton>();
-        private Button _addEntityButton;
+        private Button _editEntityButton;
         private GroupBox _currentInputs;
 
-        public AddEntityForm(IDatabaseProvider databaseProvider)
+        public EditEntityFromTableForm(IDatabaseProvider databaseProvider)
         {
-            _dataBaseProvider = databaseProvider;
+            _databaseProvider = databaseProvider;
             InitializeComponent();
-            _addEntityButton = new Button();
-            _addEntityButton.Hide();
-            _addEntityButton.Text = "Добавить";
-            _addEntityButton.Location = new Point(650, 75);
-            _addEntityButton.Click += HandleOnSumbit;
-            Controls.Add(_addEntityButton);
+            _editEntityButton = new Button();
+            _editEntityButton.Hide();
+            _editEntityButton.Text = "Редактировать";
+            _editEntityButton.Size = new Size(120, 20);
+            _editEntityButton.Location = new Point(650, 75);
+            _editEntityButton.Click += HandleOnSumbit;
+            Controls.Add(_editEntityButton);
             PrintTablesList();
         }
 
         private void PrintTablesList()
         {
-            var tables = _dataBaseProvider.GetTables();
+            var tables = _databaseProvider.GetTables();
             var groupBox = new GroupBox();
             groupBox.Text = "Выберите таблицу";
             groupBox.Location = new Point(30, 70);
@@ -68,10 +71,11 @@ namespace MSAccessApp.Forms
                     _currentInputs?.Dispose();
                 }
 
-                _addEntityButton.Show();
+                _editEntityButton.Show();
+                MessageBox.Show("Чтобы изменить запись, введите значения полей, которые необходимо заменить, и первичный ключ, чтобы обратиться к записи.");
                 var groupBox = new GroupBox();
-                groupBox.Text = "Заполните поля новой записи";
-                var columns = _dataBaseProvider.GetTableColumnsWithTypes(button.Name).Keys.ToArray();
+                groupBox.Text = "Заполните новые поля записи";
+                var columns = _databaseProvider.GetTableColumnsWithTypes(button.Name).Keys.ToArray();
                 Array.Sort(columns);
                 groupBox.Location = new Point(300, 70);
                 groupBox.Size = new Size(320, (columns.Length) * 40 + 40);
@@ -97,30 +101,23 @@ namespace MSAccessApp.Forms
         {
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
             var values = new string[_currentInputs.Controls.Count];
-            var typeOnColumns = _dataBaseProvider.GetTableColumnsWithTypes(tableName);
+            var typeOnColumns = _databaseProvider.GetTableColumnsWithTypes(tableName);
             var columns = typeOnColumns.Keys.ToArray();
             Array.Sort(columns);
-            var success = true;
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {
-               values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text, typeOnColumns[columns[i]]);
-                success &= !string.IsNullOrEmpty(values[i]);
+                values[i] = Parser.GetValueFromInput(_currentInputs.Controls[i].Text, typeOnColumns[columns[i]]);
                 _currentInputs.Controls[i].Text = columns[i] + ":";
             }
 
-            if (success)
+            if (_databaseProvider.UpdateRowFromTable(tableName, values))
             {
-                success &= _dataBaseProvider.AddRowToTable(tableName, values);
-            }
-
-            if (success)
-            {
-                MessageBox.Show("Запись успешно добавлена.");
+                MessageBox.Show("Запись успешно обновлена.");
             }
             else
             {
-                MessageBox.Show("Запись добавлена не была. Попробуйте снова.");
+                MessageBox.Show("Не удалось обновить запись, попробуйте ещё раз.");
             }
         }
     }

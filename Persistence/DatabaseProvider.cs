@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
+using MSAccessApp.Modules;
 
 namespace MSAccessApp.Persistence
 {
@@ -68,7 +69,7 @@ namespace MSAccessApp.Persistence
         }
 
         /// <inheritdoc />
-        public IEnumerable<DataRow> GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null)
+        public (IEnumerable<DataRow> rows, List<string> columns) GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -84,9 +85,15 @@ namespace MSAccessApp.Persistence
 
                         adapter.Fill(dataSet);
 
-                        if (dataSet.Tables.Count == 0) { return new List<DataRow>(); }
+                        if (dataSet.Tables.Count == 0) { return (new List<DataRow>(), new List<string>()); }
 
-                        return dataSet.Tables[0].AsEnumerable();
+                        var orderedColumns = new List<string>();
+                        foreach(var column in dataSet.Tables[0].Columns)
+                        {
+                            orderedColumns.Add(column.ToString());
+                        }
+
+                        return (dataSet.Tables[0].AsEnumerable(), orderedColumns);  
                     }
                 }
                 catch (Exception e)
@@ -99,7 +106,7 @@ namespace MSAccessApp.Persistence
                 }
             }
 
-            return new List<DataRow>();
+            return (new List<DataRow>(), new List<string>());
         }
 
         /// <inheritdoc />
@@ -210,6 +217,94 @@ namespace MSAccessApp.Persistence
                         if (dataSet.Tables[0].Rows.Count == 0) { return false; }
 
                         stringQuery = $"DELETE FROM [{tableName}]  WHERE [{keyColumn}]={id}";
+                        cmd.CommandText = stringQuery;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Ошибка во время удаления записи из таблицы {tableName}: {e.Message}");
+                    return false;
+                }
+                finally
+                {
+                    connection?.Close();
+                }
+            }
+
+            return true;
+        }
+
+        public bool UpdateRowFromTable(string tableName, string[] values)
+        {
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+
+            using (var connection = new OleDbConnection(connectionsString))
+            {
+                try
+                {
+                    lock (_syncRoot)
+                    {
+                        connection.Open();
+                        var cmd = new OleDbCommand();
+                        cmd.Connection = connection;
+
+                        // Выбираем из аргументов ключевое поле
+                        var schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys,
+                        new object[] { null, null, tableName });
+                        var keyColumn = schemaTable.Rows[0][3];
+
+                        schemaTable = connection.GetOleDbSchemaTable(
+                          OleDbSchemaGuid.Columns,
+                          new Object[] { null, null, tableName });
+                        var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
+                        var columnOrdinalForType = schemaTable.Columns["DATA_TYPE"].Ordinal;
+                        var columns = new string[schemaTable.Rows.Count];
+                        var typeOfColumns = new Dictionary<string, OleDbType>();
+
+                        for (var i = 0; i < schemaTable.Rows.Count; ++i)
+                        {
+                            var dataRow = schemaTable.Rows[i] as DataRow;
+                            columns[i] = dataRow.ItemArray[columnOrdinalForName].ToString();
+                            typeOfColumns[columns[i]] = (OleDbType)schemaTable.Rows[i].ItemArray[columnOrdinalForType];
+                        }
+
+                        // Значения приходят к нам в определнном порядке, т.к. колонки отсротированы
+                        Array.Sort(columns);
+                        var keyIndex = Array.IndexOf(columns, keyColumn);
+
+                        // Проверяем, есть ли такая запись
+                        var stringQuery = $"SELECT * FROM {tableName} WHERE [{keyColumn}]={values[keyIndex]}";
+                        var adapter = new OleDbDataAdapter(stringQuery, connection);
+                        var dataSet = new DataSet();
+                        adapter.Fill(dataSet);
+
+                        if (dataSet.Tables[0].Rows.Count == 0) { return false; }
+
+                        // формируем кусок запроса на обновление, который идет после SET
+                        var setString = "";
+
+                        for (var i = 0; i < values.Length; ++i)
+                        {
+                            if (string.IsNullOrEmpty(values[i])) { continue; }
+                            if (i == keyIndex) { continue; }
+
+                            setString += $"[{columns[i]}]="
+                                + (Parser.OleDbTypeToNetType(typeOfColumns[columns[i]]) == typeof(string)
+                                    ? $"'{values[i]}', "
+                                    : $"{values[i]}, ");
+                        }
+
+                        if (string.IsNullOrEmpty(setString))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            setString = setString.Substring(0, setString.Length - 2);
+                        }
+
+                        stringQuery = $"UPDATE {tableName} SET {setString} WHERE [{keyColumn}]={values[keyIndex]}";
                         cmd.CommandText = stringQuery;
                         cmd.ExecuteNonQuery();
                     }

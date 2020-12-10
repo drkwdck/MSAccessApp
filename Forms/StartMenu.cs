@@ -26,7 +26,8 @@ namespace MSAccessApp.Forms
                 "AllEntitiesFromTableFormButton" => new AllEntitiesFromTableForm(_databaseProvider),
                 "AddEntityFormButton" => new AddEntityForm(_databaseProvider),
                 "RemoveEntityFromTableFormButton" => new RemoveEntityFromTableForm(_databaseProvider),
-                _ => null
+                "EditEntityFromTableFormButton" => new EditEntityFromTableForm(_databaseProvider),
+                 _ => null
             };
 
             form?.Show();

@@ -17,10 +17,10 @@ namespace MSAccessApp.Persistence
         List<string> GetTables();
 
         /// <summary>
-        /// Получить строки из таблицы.
+        /// Получить строки из таблицы и колонки, соответсвующие им.
         /// Если фильтр не задан, возвращает все записи
         /// </summary>
-        IEnumerable<DataRow> GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null);
+        (IEnumerable<DataRow> rows, List<string> columns) GetRowsFromTable(string tableName, Func<IEnumerable<DataRow>, IEnumerable<DataRow>>? filterPredicat = null);
 
         /// <summary>
         /// Получить список названий колонок таблицы и тип данных в них
@@ -38,5 +38,13 @@ namespace MSAccessApp.Persistence
         /// Удалить запись из таблицы по первичному ключу
         /// </summary>
         bool RemoveRowFromTable(string tableName, string id);
+
+        /// <summary>
+        /// Обновляет поля записи
+        /// </summary>
+        /// <param name="tableName"></param>
+        /// <param name="values">Массив новых значений. Содержит ключ, для нахождения записи.
+        /// Если значение - пустая строка, то оно не обновится</param>
+        bool UpdateRowFromTable(string tableName, string[] values);
     }
 }

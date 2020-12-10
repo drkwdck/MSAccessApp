@@ -77,7 +77,7 @@ namespace MSAccessApp.Forms
         {
             return (sender, args) =>
             {
-                var rows = _databaseProvider.GetRowsFromTable(tableName);
+                (var rows, var columns) = _databaseProvider.GetRowsFromTable(tableName);
 
                 // Формируем строки для модалки, отображающей выборку
                 var items = rows.AsEnumerable().Where(row => row as DataRow != null)
@@ -99,12 +99,9 @@ namespace MSAccessApp.Forms
                 var listVeiw = new ListView();
                 ListViewInitilze(listVeiw);
 
-                var columns = _databaseProvider.GetTableColumnsWithTypes(tableName).Keys.ToArray();
-                Array.Sort(columns);
-
                 foreach (var columnName in columns)
                 {
-                    listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / columns.Length, HorizontalAlignment.Left);
+                    listVeiw.Columns.Add(columnName.ToString(), _listViewWidth / columns.Count, HorizontalAlignment.Left);
                 }
 
                 listVeiw.Items.AddRange(items);

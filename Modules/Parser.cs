@@ -54,7 +54,30 @@ namespace MSAccessApp.Modules
                     break;
             }
 
-            return inputString;
+            return cuttedString;
+        }
+
+        public static Type OleDbTypeToNetType(OleDbType oleDbType)
+        {
+            switch (oleDbType)
+            {
+                case OleDbType.BigInt:
+                case OleDbType.Guid:
+                case OleDbType.Integer:
+                    return typeof(int);
+                case OleDbType.VarChar:
+                case OleDbType.VarWChar:
+                case OleDbType.BSTR:
+                case OleDbType.Char:
+                case OleDbType.LongVarChar:
+                case OleDbType.LongVarWChar:
+                    return typeof(string);
+                case OleDbType.Date:
+                case OleDbType.DBDate:
+                    return typeof(DateTime);
+                default:
+                    return typeof(Object);
+            }
         }
     }
 }
