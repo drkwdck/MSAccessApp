@@ -27,6 +27,8 @@ namespace MSAccessApp.Modules
                 cuttedString = inputString;
             }
 
+            if (string.IsNullOrWhiteSpace(cuttedString)) { return ""; }
+
             if (type == typeof(string))
             {
                 return "'" + cuttedString + "'";
@@ -37,7 +39,7 @@ namespace MSAccessApp.Modules
                 return "#" + cuttedString + "#";
             }
 
-            return cuttedString;
+            return cuttedString.Trim();
         }
     }
 }

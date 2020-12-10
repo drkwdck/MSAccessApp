@@ -242,31 +242,26 @@ namespace MSAccessApp.Persistence
                         // Выбираем из аргументов ключевое поле
                         var schemaTable = connection.GetOleDbSchemaTable(OleDbSchemaGuid.Primary_Keys,
                         new object[] { null, null, tableName });
-                        var keyColumn = schemaTable.Rows[0][3];
+                        var keyColumn = schemaTable.Rows[0][3].ToString();
 
-                        schemaTable = connection.GetOleDbSchemaTable(
-                          OleDbSchemaGuid.Columns,
-                          new Object[] { null, null, tableName });
-                        var columnOrdinalForName = schemaTable.Columns["COLUMN_NAME"].Ordinal;
-                        var columnOrdinalForType = schemaTable.Columns["DATA_TYPE"].Ordinal;
-                        var columns = new string[schemaTable.Rows.Count];
-                        var typeOfColumns = new Dictionary<string, OleDbType>();
-
-                        for (var i = 0; i < schemaTable.Rows.Count; ++i)
-                        {
-                            var dataRow = schemaTable.Rows[i] as DataRow;
-                            columns[i] = dataRow.ItemArray[columnOrdinalForName].ToString();
-                            typeOfColumns[columns[i]] = (OleDbType)schemaTable.Rows[i].ItemArray[columnOrdinalForType];
-                        }
-
-                        // Значения приходят к нам в определнном порядке, т.к. колонки отсротированы
-                        Array.Sort(columns);
-                        var keyIndex = Array.IndexOf(columns, keyColumn);
-
-                        // Проверяем, есть ли такая запись
-                        var stringQuery = $"SELECT * FROM {tableName} WHERE [{keyColumn}]={values[keyIndex]}";
+                        var stringQuery = $"SELECT * FROM [{tableName}]";
                         var adapter = new OleDbDataAdapter(stringQuery, connection);
                         var dataSet = new DataSet();
+
+                        adapter.Fill(dataSet);
+
+
+                        var columns = new List<string>();
+                        foreach (var column in dataSet.Tables[0].Columns)
+                        {
+                            columns.Add(column.ToString());
+                        }
+
+                        var keyIndex = columns.IndexOf(keyColumn);
+
+                        // Проверяем, есть ли такая запись
+                        stringQuery = $"SELECT * FROM {tableName} WHERE [{keyColumn}]={values[keyIndex]}";
+                        dataSet = new DataSet();
                         adapter.Fill(dataSet);
 
                         if (dataSet.Tables[0].Rows.Count == 0) { return false; }
@@ -279,10 +274,7 @@ namespace MSAccessApp.Persistence
                             if (string.IsNullOrEmpty(values[i])) { continue; }
                             if (i == keyIndex) { continue; }
 
-                            if (dataSet.Tables[0].Columns[i].DataType == typeof(string))
-                            {
-                                values[i] = "'" + values[i] + "'";
-                            }
+                            setString += $"[{columns[i]}] = {values[i]}, ";
                         }
 
                         if (string.IsNullOrEmpty(setString))

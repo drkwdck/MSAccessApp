@@ -30,4 +30,4 @@ Thumbs.db
 bin/
 obj/
 .vs/
-*.accdb*
+*.accdb

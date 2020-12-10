@@ -10,8 +10,7 @@ using System.Windows.Forms;
 namespace MSAccessApp.Forms
 {
     public partial class EditEntityFromTableForm : Form
-    {
-
+    { 
         private readonly IDatabaseProvider _databaseProvider;
 
         private List<RadioButton> _tablesRadioButtons = new List<RadioButton>();
@@ -25,9 +24,9 @@ namespace MSAccessApp.Forms
             _editEntityButton = new Button();
             _editEntityButton.Hide();
             _editEntityButton.Text = "Редактировать";
-            _editEntityButton.Size = new Size(120, 20);
             _editEntityButton.Location = new Point(650, 75);
             _editEntityButton.Click += HandleOnSumbit;
+            _editEntityButton.Size = new Size(100, 40);
             Controls.Add(_editEntityButton);
             PrintTablesList();
         }
@@ -38,14 +37,13 @@ namespace MSAccessApp.Forms
             var groupBox = new GroupBox();
             groupBox.Text = "Выберите таблицу";
             groupBox.Location = new Point(30, 70);
-            groupBox.Size = new Size(230, (tables.Count + 2) * 20);
+            groupBox.Size = new Size(220, (tables.Count + 2) * 20);
 
             var y = 20;
             foreach (var tableName in tables)
             {
                 var button = new RadioButton();
                 button.Location = new Point(31, y);
-                button.Size = new Size(190, 20);
                 button.Name = tableName;
                 button.Text = tableName;
                 button.CheckedChanged += HandleTablesCheckedChanged;
@@ -72,13 +70,11 @@ namespace MSAccessApp.Forms
                 }
 
                 _editEntityButton.Show();
-                MessageBox.Show("Чтобы изменить запись, введите значения полей, которые необходимо заменить, и первичный ключ, чтобы обратиться к записи.");
                 var groupBox = new GroupBox();
-                groupBox.Text = "Заполните новые поля записи";
-                var columns = _databaseProvider.GetTableColumnsWithTypes(button.Name).Keys.ToArray();
-                Array.Sort(columns);
+                groupBox.Text = "Заполните поля, которые необходимо обновить";
+                (var rows, var columns) = _databaseProvider.GetRowsFromTable(button.Name);
                 groupBox.Location = new Point(300, 70);
-                groupBox.Size = new Size(320, (columns.Length) * 40 + 40);
+                groupBox.Size = new Size(320, (columns.Count) * 40 + 40);
 
                 var y = 20;
 
@@ -102,8 +98,7 @@ namespace MSAccessApp.Forms
             var tableName = _tablesRadioButtons.FirstOrDefault(_ => _.Checked).Name;
             var values = new string[_currentInputs.Controls.Count];
             var typeOnColumns = _databaseProvider.GetTableColumnsWithTypes(tableName);
-            var columns = typeOnColumns.Keys.ToArray();
-            Array.Sort(columns);
+            (var rows, var columns) = _databaseProvider.GetRowsFromTable(tableName);
 
             for (var i = 0; i < _currentInputs.Controls.Count; ++i)
             {
@@ -117,7 +112,7 @@ namespace MSAccessApp.Forms
             }
             else
             {
-                MessageBox.Show("Не удалось обновить запись, попробуйте ещё раз.");
+                MessageBox.Show("Запись обновлена не была. Попробуйте снова.");
             }
         }
     }
