@@ -78,7 +78,7 @@ namespace MSAccessApp.Persistence
                 {
                     lock (_syncRoot)
                     {
-                        var stringQuery = $"SELECT * FROM {tableName}";
+                        var stringQuery = $"SELECT * FROM [{tableName}]";
                         var adapter = new OleDbDataAdapter(stringQuery, connection);
                         var dataSet = new DataSet();
 
@@ -165,7 +165,7 @@ namespace MSAccessApp.Persistence
                         connection.Open();
                         var cmd = new OleDbCommand();
                         cmd.Connection = connection;
-                        cmd.CommandText = $"INSERT INTO {tableName} VALUES({string.Join(", ", values)})";
+                        cmd.CommandText = $"INSERT INTO [{tableName}] VALUES({string.Join(", ", values)})";
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -202,14 +202,14 @@ namespace MSAccessApp.Persistence
 
                         var keyColumn = schemaTable.Rows[0][3];
 
-                        var stringQuery = $"SELECT * FROM {tableName} WHERE [{keyColumn}]={id}";
+                        var stringQuery = $"SELECT * FROM [{tableName}] WHERE [{keyColumn}]={id}";
                         var adapter = new OleDbDataAdapter(stringQuery, connection);
                         var dataSet = new DataSet();
                         adapter.Fill(dataSet);
 
                         if (dataSet.Tables[0].Rows.Count == 0) { return false; }
 
-                        stringQuery = $"DELETE FROM {tableName}  WHERE [{keyColumn}]={id}";
+                        stringQuery = $"DELETE FROM [{tableName}]  WHERE [{keyColumn}]={id}";
                         cmd.CommandText = stringQuery;
                         cmd.ExecuteNonQuery();
                     }
