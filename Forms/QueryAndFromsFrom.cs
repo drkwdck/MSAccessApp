@@ -102,7 +102,78 @@ namespace MSAccessApp.Forms
 
         private void button3_Click(object sender, EventArgs e)
         {
-            var stringQuery = "SELECT Спортсмен.[Фамилия] FROM Спортсмен WHERE Спортсмен.[Номер спортсмена] IN ( SELECT TOP 3 результат.[Номер спортсмена] FROM Результат ORDER BY Результат.[Результат попытки]);";
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist(button.Text)) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    var stringQuery = "SELECT Спортсмен.[Фамилия] FROM Спортсмен WHERE Спортсмен.[Номер спортсмена] IN ( SELECT TOP 3 результат.[Номер спортсмена] FROM Результат ORDER BY Результат.[Результат попытки]);";
+                    var adapter = new OleDbDataAdapter(stringQuery, connection);
+                    var dataSet = new DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    var result = "";
+
+                    foreach (DataRow row in dataSet.Tables[0].Rows)
+                    {
+                        result += $"{row.ItemArray[0]}\n";
+                    }
+
+                    MessageBox.Show($"{button.Text}:\n{ result}");
+                }
+                catch { }
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("Спортсмен по номеру команды")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    var stringQuery = $"SELECT * FROM Спортсмен WHERE Спортсмен.[Идентификатор команды]= {textBox1.Text}; ";
+                    var adapter = new OleDbDataAdapter(stringQuery, connection);
+                    var dataSet = new DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    var result = "";
+
+                    foreach (DataRow row in dataSet.Tables[0].Rows)
+                    {
+                        foreach(var filed in row.ItemArray)
+                        {
+                            result += filed.ToString() + " ";
+                        }
+
+                        result += "\n";
+                    }
+
+                    MessageBox.Show($"Спортсмен по номеру команды:\n{result}");
+                }
+                catch 
+                {
+                    MessageBox.Show("Попробуйте снова.");
+                }
+                finally
+                {
+                    textBox1.Text = "";
+                }
+            }
         }
     }
 }
