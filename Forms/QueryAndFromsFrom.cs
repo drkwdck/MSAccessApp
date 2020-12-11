@@ -3,8 +3,6 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace MSAccessApp.Forms
@@ -66,7 +64,7 @@ namespace MSAccessApp.Forms
             }
         }
 
-      
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -89,7 +87,7 @@ namespace MSAccessApp.Forms
 
                     var result = "";
 
-                    foreach(DataRow row in dataSet.Tables[0].Rows)
+                    foreach (DataRow row in dataSet.Tables[0].Rows)
                     {
                         result += $"{row.ItemArray[0]}: {row.ItemArray[1]}\n";
                     }
@@ -155,7 +153,7 @@ namespace MSAccessApp.Forms
 
                     foreach (DataRow row in dataSet.Tables[0].Rows)
                     {
-                        foreach(var filed in row.ItemArray)
+                        foreach (var filed in row.ItemArray)
                         {
                             result += filed.ToString() + " ";
                         }
@@ -165,13 +163,179 @@ namespace MSAccessApp.Forms
 
                     MessageBox.Show($"Спортсмен по номеру команды:\n{result}");
                 }
-                catch 
+                catch
                 {
                     MessageBox.Show("Попробуйте снова.");
                 }
                 finally
                 {
                     textBox1.Text = "";
+                }
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("Спортсмены с заданным именем")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    var stringQuery = $"SELECT * FROM Спортсмен WHERE[Имя] = '{textBox2.Text}'; ";
+                    var adapter = new OleDbDataAdapter(stringQuery, connection);
+                    var dataSet = new DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    var result = "";
+
+                    foreach (DataRow row in dataSet.Tables[0].Rows)
+                    {
+                        foreach (var filed in row.ItemArray)
+                        {
+                            result += filed.ToString() + " ";
+                        }
+
+                        result += "\n";
+                    }
+
+                    MessageBox.Show($"Спортсмены с заданным именем:\n{result}");
+                }
+                catch
+                {
+                    MessageBox.Show("Попробуйте снова.");
+                }
+                finally
+                {
+                    textBox2.Text = "";
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("Кол-во соревнований по виду спорта")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    var stringQuery = $"SELECT COUNT(*) AS [Кол-во соревнований] FROM Соревнование WHERE[Идентификатор вида спорта] = {textBox3.Text}; ";
+                    var adapter = new OleDbDataAdapter(stringQuery, connection);
+                    var dataSet = new DataSet();
+
+                    adapter.Fill(dataSet);
+
+                    var result = "";
+
+                    foreach (DataRow row in dataSet.Tables[0].Rows)
+                    {
+                        foreach (var filed in row.ItemArray)
+                        {
+                            result += filed.ToString() + " ";
+                        }
+
+                        result += "\n";
+                    }
+
+                    MessageBox.Show($"Кол-во соревнований по виду спорта:\n{result}");
+                }
+                catch
+                {
+                    MessageBox.Show("Попробуйте снова.");
+                }
+                finally
+                {
+                    textBox3.Text = "";
+                }
+            }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("6_delete_1")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var cmd = new OleDbCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandText = "DELETE * FROM Соревнование WHERE[Идентификатор вида спорта] IS NULL;";
+                    cmd.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Попробуйте снова.");
+                }
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("Обновить имя цветковой")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var cmd = new OleDbCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandText = "UPDATE Спортсмен SET Фамилия = 'Фамилия после адпейта' WHERE Фамилия = 'Цветкова';";
+                    cmd.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Попробуйте снова.");
+                }
+            }
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+
+            if (button == null) { return; }
+            if (!IsQueryExist("6_hart_insert_1")) { return; }
+
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+
+            using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    var cmd = new OleDbCommand();
+                    cmd.Connection = connection;
+                    cmd.CommandText = "INSERT INTO Спортсмен ( Фамилия ) SELECT Тренер FROM Команда;";
+                    cmd.ExecuteNonQuery();
+                }
+                catch
+                {
+                    MessageBox.Show("Попробуйте снова.");
                 }
             }
         }
