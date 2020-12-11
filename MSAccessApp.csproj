@@ -88,6 +88,12 @@
     <Compile Include="Forms\MSysObjectsForm.Designer.cs">
       <DependentUpon>MSysObjectsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\QueryAndFromsFrom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\QueryAndFromsFrom.Designer.cs">
+      <DependentUpon>QueryAndFromsFrom.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RemoveEntityFromTableForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AllEntitiesFromTableForm.resx">
       <DependentUpon>AllEntitiesFromTableForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\QueryAndFromsFrom.resx">
+      <DependentUpon>QueryAndFromsFrom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StartMenu.resx">
       <DependentUpon>StartMenu.cs</DependentUpon>

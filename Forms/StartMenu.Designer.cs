@@ -38,6 +38,7 @@ namespace MSAccessApp.Forms
             this.RemoveEntityFromTableFormButton = new System.Windows.Forms.Button();
             this.EditEntityFromTableFormButton = new System.Windows.Forms.Button();
             this.MSysObjectsFormsButton = new System.Windows.Forms.Button();
+            this.QueryAndFromsFromButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AllEntitiesFromTableFormButton
@@ -90,11 +91,22 @@ namespace MSAccessApp.Forms
             this.MSysObjectsFormsButton.UseVisualStyleBackColor = true;
             this.MSysObjectsFormsButton.Click += HadnleOpenFormClick;
             // 
+            // QueryAndFromsFromButton
+            // 
+            this.QueryAndFromsFromButton.Location = new System.Drawing.Point(208, 177);
+            this.QueryAndFromsFromButton.Name = "QueryAndFromsFromButton";
+            this.QueryAndFromsFromButton.Size = new System.Drawing.Size(140, 48);
+            this.QueryAndFromsFromButton.TabIndex = 5;
+            this.QueryAndFromsFromButton.Text = "Запросы и формы";
+            this.QueryAndFromsFromButton.UseVisualStyleBackColor = true;
+            this.QueryAndFromsFromButton.Click += HadnleOpenFormClick;
+            // 
             // StartMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.QueryAndFromsFromButton);
             this.Controls.Add(this.MSysObjectsFormsButton);
             this.Controls.Add(this.EditEntityFromTableFormButton);
             this.Controls.Add(this.RemoveEntityFromTableFormButton);
@@ -113,5 +125,6 @@ namespace MSAccessApp.Forms
         private System.Windows.Forms.Button RemoveEntityFromTableFormButton;
         private System.Windows.Forms.Button EditEntityFromTableFormButton;
         private System.Windows.Forms.Button MSysObjectsFormsButton;
+        private System.Windows.Forms.Button QueryAndFromsFromButton;
     }
 }

@@ -28,6 +28,7 @@ namespace MSAccessApp.Forms
                 "RemoveEntityFromTableFormButton" => new RemoveEntityFromTableForm(_databaseProvider),
                 "EditEntityFromTableFormButton" => new EditEntityFromTableForm(_databaseProvider),
                 "MSysObjectsFormButton" => new MSysObjectsForm(_databaseProvider),
+                "QueryAndFromsFromButton" => new QueryAndFromsFrom(_databaseProvider),
                  _ => null
             };
 

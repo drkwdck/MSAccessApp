@@ -47,5 +47,11 @@ namespace MSAccessApp.Persistence
         /// <param name="values">Массив новых значений. Содержит ключ, для нахождения записи.
         /// Если значение - пустая строка, то оно не обновится</param>
         bool UpdateRowFromTable(string tableName, string[] values);
+
+        /// <summary>
+        /// Выполняет переданный sql запрос
+        /// </summary>
+        /// <param name="query"></param>
+        void ExecSqlQuery(string query);
     }
 }

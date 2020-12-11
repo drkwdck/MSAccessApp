@@ -21,7 +21,7 @@ namespace MSAccessApp.Persistence
 
         public static DatabaseProvider Get()
         {
-            lock(_syncRoot)
+            lock (_syncRoot)
             {
                 if (_instance == null)
                 {
@@ -125,10 +125,6 @@ namespace MSAccessApp.Persistence
                 catch (Exception e)
                 {
                     Console.WriteLine($"Ошибка во время получения строк таблицы {tableName}: {e.Message}");
-                }
-                finally
-                {
-                    connection?.Close();
                 }
             }
 
@@ -329,6 +325,34 @@ namespace MSAccessApp.Persistence
             }
 
             return true;
+        }
+
+        public void ExecSqlQuery(string query)
+        {
+            var connectionsString = ConfigurationManager.ConnectionStrings["Database"].ConnectionString;
+
+            using (var connection = new OleDbConnection(connectionsString))
+            {
+                try
+                {
+                    lock (_syncRoot)
+                    {
+                        connection.Open();
+                        var cmd = new OleDbCommand();
+                        cmd.Connection = connection;
+                        cmd.CommandText = query;
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Ошибка во время выполнения запроса {query}: {e.Message}");
+                }
+                finally
+                {
+                    connection?.Close();
+                }
+            }
         }
 
         #endregion
