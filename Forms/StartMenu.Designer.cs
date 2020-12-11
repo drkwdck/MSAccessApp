@@ -37,13 +37,14 @@ namespace MSAccessApp.Forms
             this.AddEntityFormButton = new System.Windows.Forms.Button();
             this.RemoveEntityFromTableFormButton = new System.Windows.Forms.Button();
             this.EditEntityFromTableFormButton = new System.Windows.Forms.Button();
+            this.MSysObjectsFormsButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AllEntitiesFromTableFormButton
             // 
-            this.AllEntitiesFromTableFormButton.Location = new System.Drawing.Point(37, 46);
+            this.AllEntitiesFromTableFormButton.Location = new System.Drawing.Point(37, 47);
             this.AllEntitiesFromTableFormButton.Name = "AllEntitiesFromTableFormButton";
-            this.AllEntitiesFromTableFormButton.Size = new System.Drawing.Size(119, 59);
+            this.AllEntitiesFromTableFormButton.Size = new System.Drawing.Size(119, 58);
             this.AllEntitiesFromTableFormButton.TabIndex = 0;
             this.AllEntitiesFromTableFormButton.Text = "Список всех записей таблицы";
             this.AllEntitiesFromTableFormButton.UseVisualStyleBackColor = true;
@@ -51,9 +52,9 @@ namespace MSAccessApp.Forms
             // 
             // AddEntityFormButton
             // 
-            this.AddEntityFormButton.Location = new System.Drawing.Point(208, 46);
+            this.AddEntityFormButton.Location = new System.Drawing.Point(208, 47);
             this.AddEntityFormButton.Name = "AddEntityFormButton";
-            this.AddEntityFormButton.Size = new System.Drawing.Size(140, 59);
+            this.AddEntityFormButton.Size = new System.Drawing.Size(140, 58);
             this.AddEntityFormButton.TabIndex = 1;
             this.AddEntityFormButton.Text = "Добавить запись в таблицу";
             this.AddEntityFormButton.UseVisualStyleBackColor = true;
@@ -79,17 +80,28 @@ namespace MSAccessApp.Forms
             this.EditEntityFromTableFormButton.UseVisualStyleBackColor = true;
             this.EditEntityFromTableFormButton.Click += HadnleOpenFormClick;
             // 
+            // MSysObjectsFormButton
+            // 
+            this.MSysObjectsFormsButton.Location = new System.Drawing.Point(37, 177);
+            this.MSysObjectsFormsButton.Name = "MSysObjectsFormButton";
+            this.MSysObjectsFormsButton.Size = new System.Drawing.Size(119, 49);
+            this.MSysObjectsFormsButton.TabIndex = 4;
+            this.MSysObjectsFormsButton.Text = "MSysObjects";
+            this.MSysObjectsFormsButton.UseVisualStyleBackColor = true;
+            this.MSysObjectsFormsButton.Click += HadnleOpenFormClick;
+            // 
             // StartMenu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.MSysObjectsFormsButton);
             this.Controls.Add(this.EditEntityFromTableFormButton);
             this.Controls.Add(this.RemoveEntityFromTableFormButton);
             this.Controls.Add(this.AddEntityFormButton);
             this.Controls.Add(this.AllEntitiesFromTableFormButton);
             this.Name = "StartMenu";
-            this.Text = "StartMenu";
+            this.Text = "Главное меню";
             this.ResumeLayout(false);
 
         }
@@ -100,5 +112,6 @@ namespace MSAccessApp.Forms
         private System.Windows.Forms.Button AddEntityFormButton;
         private System.Windows.Forms.Button RemoveEntityFromTableFormButton;
         private System.Windows.Forms.Button EditEntityFromTableFormButton;
+        private System.Windows.Forms.Button MSysObjectsFormsButton;
     }
 }

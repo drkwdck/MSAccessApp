@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Linq;
-using MSAccessApp.Modules;
 
 namespace MSAccessApp.Persistence
 {
@@ -12,17 +11,44 @@ namespace MSAccessApp.Persistence
     {
         #region Fields
 
-        private static readonly DatabaseProvider _instance = new DatabaseProvider();
+        private static DatabaseProvider _instance;
         private static readonly object _syncRoot = new Object();
         #endregion
 
         #region .ctor
 
-        private DatabaseProvider() {}
+        private DatabaseProvider() { }
 
         public static DatabaseProvider Get()
         {
-            return _instance;
+            lock(_syncRoot)
+            {
+                if (_instance == null)
+                {
+                    _instance = new DatabaseProvider();
+
+                    var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
+                    using (var connection = new OleDbConnection(connectionsString.ConnectionString))
+                    {
+                        try
+                        {
+                            connection.Open();
+                            var cmd = new OleDbCommand();
+
+                            cmd.Connection = connection;
+                            cmd.CommandText = "GRANT SELECT ON MSysObjects TO Admin;";
+                            cmd.ExecuteNonQuery();
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Не удалось получить доступ к MSysObjects");
+                        }
+                    }
+
+                }
+
+                return _instance;
+            }
         }
 
         #endregion
@@ -46,7 +72,7 @@ namespace MSAccessApp.Persistence
                         connection.Open();
                         var userTables = connection.GetSchema("Tables", restrictions);
                         List<string> tableNames = new List<string>();
-                        
+
                         foreach (DataRow row in userTables.Rows)
                         {
                             tableNames.Add(row[2]?.ToString());
@@ -88,12 +114,12 @@ namespace MSAccessApp.Persistence
                         if (dataSet.Tables.Count == 0) { return (new List<DataRow>(), new List<string>()); }
 
                         var orderedColumns = new List<string>();
-                        foreach(var column in dataSet.Tables[0].Columns)
+                        foreach (var column in dataSet.Tables[0].Columns)
                         {
                             orderedColumns.Add(column.ToString());
                         }
 
-                        return (dataSet.Tables[0].AsEnumerable(), orderedColumns);  
+                        return (dataSet.Tables[0].AsEnumerable(), orderedColumns);
                     }
                 }
                 catch (Exception e)
