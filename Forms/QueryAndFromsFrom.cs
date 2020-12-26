@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MSAccessApp.Forms
@@ -17,6 +18,11 @@ namespace MSAccessApp.Forms
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Проверяет существование запроса по таблице MSysObjects
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         private bool IsQueryExist(string query)
         {
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
@@ -52,13 +58,13 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = "SELECT AVG([Количество игроков]) AS [Среднее количество игроков] FROM Команда; ";
+                    var stringQuery = "SELECT COUNT(*) FROM Студент WHERE Пол='ж'";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
                     adapter.Fill(dataSet);
 
-                    MessageBox.Show($"Среднее кол-во игроков: {dataSet.Tables[0].Rows[0].ItemArray[0]}");
+                    MessageBox.Show($"кол-во студентов женщин: {dataSet.Tables[0].Rows[0].ItemArray[0]}");
                 }
                 catch { }
             }
@@ -79,7 +85,7 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = "SELECT [Идентификатор команды], COUNT(*) AS Количество FROM Спортсмен GROUP BY[Идентификатор команды];";
+                    var stringQuery = "SELECT MAX([Количество студентов]) AS [Максимальное количество студентов] FROM Группа; ";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
@@ -89,10 +95,10 @@ namespace MSAccessApp.Forms
 
                     foreach (DataRow row in dataSet.Tables[0].Rows)
                     {
-                        result += $"{row.ItemArray[0]}: {row.ItemArray[1]}\n";
+                        result += $"{row.ItemArray[0]}";
                     }
 
-                    MessageBox.Show($"Кол-во спортсменов по командам\n{ result}");
+                    MessageBox.Show($"Максмальное количество студентов:\n{ result}");
                 }
                 catch { }
             }
@@ -111,7 +117,7 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = "SELECT Спортсмен.[Фамилия] FROM Спортсмен WHERE Спортсмен.[Номер спортсмена] IN ( SELECT TOP 3 результат.[Номер спортсмена] FROM Результат ORDER BY Результат.[Результат попытки]);";
+                    var stringQuery = "SELECT * FROM Группа WHERE[Количество студентов] = 2;";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
@@ -121,7 +127,7 @@ namespace MSAccessApp.Forms
 
                     foreach (DataRow row in dataSet.Tables[0].Rows)
                     {
-                        result += $"{row.ItemArray[0]}\n";
+                        result += $"Номер группы: {row.ItemArray[0]}    ИД: {row.ItemArray[1]}   Факультет: {row.ItemArray[2]}   Кол-во: {row.ItemArray[3]}\n";
                     }
 
                     MessageBox.Show($"{button.Text}:\n{ result}");
@@ -179,7 +185,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("Спортсмены с заданным именем")) { return; }
+            if (!IsQueryExist("поиск по полу")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -187,7 +193,7 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = $"SELECT * FROM Спортсмен WHERE[Имя] = '{textBox2.Text}'; ";
+                    var stringQuery = $"SELECT * FROM Студент WHERE Пол = '{textBox2.Text}';";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
@@ -197,15 +203,17 @@ namespace MSAccessApp.Forms
 
                     foreach (DataRow row in dataSet.Tables[0].Rows)
                     {
-                        foreach (var filed in row.ItemArray)
+                        var i = 0;
+                        foreach (var filed in row.ItemArray.Skip(1))
                         {
-                            result += filed.ToString() + " ";
+                            if (i++ >= 3) { break; } 
+                            result += filed.ToString() + "  ";
                         }
 
                         result += "\n";
                     }
 
-                    MessageBox.Show($"Спортсмены с заданным именем:\n{result}");
+                    MessageBox.Show($"Студениты по полу:\n{result}");
                 }
                 catch
                 {

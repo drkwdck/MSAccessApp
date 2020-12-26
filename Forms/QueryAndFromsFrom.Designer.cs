@@ -53,32 +53,38 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(58, 37);
+            this.button1.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(41, 71);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(119, 54);
             this.button1.TabIndex = 0;
-            this.button1.Text = "среднее кол-во игроков";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Text = "кол-во студентов женщин";
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(337, 39);
+            this.button2.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(41, 151);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(123, 53);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Кол-во спортсменов по командам";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Text = "макс кол-во студентов";
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(651, 39);
+            this.button3.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(41, 244);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(140, 52);
+            this.button3.Size = new System.Drawing.Size(119, 52);
             this.button3.TabIndex = 2;
-            this.button3.Text = "спорстмены с 3 лучшими результатами";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Text = "группа с 2 студентами";
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // groupBox1
@@ -86,7 +92,8 @@
             this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.textBox1);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(58, 178);
+            this.groupBox1.ForeColor = System.Drawing.Color.White;
+            this.groupBox1.Location = new System.Drawing.Point(810, 71);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(234, 162);
             this.groupBox1.TabIndex = 3;
@@ -95,12 +102,13 @@
             // 
             // button4
             // 
+            this.button4.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.button4.Location = new System.Drawing.Point(10, 96);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 2;
             this.button4.Text = "Выполнить";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // textBox1
@@ -124,21 +132,23 @@
             this.groupBox2.Controls.Add(this.button5);
             this.groupBox2.Controls.Add(this.textBox2);
             this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Location = new System.Drawing.Point(337, 178);
+            this.groupBox2.ForeColor = System.Drawing.Color.White;
+            this.groupBox2.Location = new System.Drawing.Point(195, 71);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(231, 162);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Спортсмены с заданным именем";
+            this.groupBox2.Text = "поиск по полу";
             // 
             // button5
             // 
+            this.button5.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.button5.Location = new System.Drawing.Point(10, 95);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 2;
             this.button5.Text = "Выполнить";
-            this.button5.UseVisualStyleBackColor = true;
+            this.button5.UseVisualStyleBackColor = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // textBox2
@@ -153,16 +163,17 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(7, 35);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(96, 13);
+            this.label2.Size = new System.Drawing.Size(27, 13);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Имя спортсмена:";
+            this.label2.Text = "Пол";
             // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.button6);
             this.groupBox3.Controls.Add(this.textBox3);
             this.groupBox3.Controls.Add(this.label3);
-            this.groupBox3.Location = new System.Drawing.Point(642, 178);
+            this.groupBox3.ForeColor = System.Drawing.Color.White;
+            this.groupBox3.Location = new System.Drawing.Point(479, 71);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(266, 162);
             this.groupBox3.TabIndex = 5;
@@ -171,12 +182,13 @@
             // 
             // button6
             // 
+            this.button6.BackColor = System.Drawing.Color.DarkSeaGreen;
             this.button6.Location = new System.Drawing.Point(25, 95);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(75, 23);
             this.button6.TabIndex = 2;
             this.button6.Text = "Выполнить";
-            this.button6.UseVisualStyleBackColor = true;
+            this.button6.UseVisualStyleBackColor = false;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
             // textBox3
@@ -197,7 +209,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(58, 401);
+            this.button7.Location = new System.Drawing.Point(195, 438);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(119, 52);
             this.button7.TabIndex = 6;
@@ -207,7 +219,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(337, 401);
+            this.button8.Location = new System.Drawing.Point(479, 438);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(139, 52);
             this.button8.TabIndex = 7;
@@ -217,7 +229,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(642, 401);
+            this.button9.Location = new System.Drawing.Point(810, 438);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(131, 51);
             this.button9.TabIndex = 8;
@@ -229,6 +241,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.DarkOliveGreen;
             this.ClientSize = new System.Drawing.Size(1075, 660);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.button8);
