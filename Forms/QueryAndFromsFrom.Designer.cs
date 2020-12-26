@@ -98,7 +98,8 @@
             this.groupBox1.Size = new System.Drawing.Size(234, 162);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Спортсмен по номеру команды";
+            this.groupBox1.Text = "кол-во студентов в группе";
+            this.groupBox1.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
             // button4
             // 
@@ -123,9 +124,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(7, 29);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(93, 13);
+            this.label1.Size = new System.Drawing.Size(41, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Номер команды:";
+            this.label1.Text = "группа";
             // 
             // groupBox2
             // 
@@ -178,7 +179,7 @@
             this.groupBox3.Size = new System.Drawing.Size(266, 162);
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Кол-во соревнований по виду спорта";
+            this.groupBox3.Text = "поиск по фамилии";
             // 
             // button6
             // 
@@ -203,38 +204,44 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(22, 36);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(109, 13);
+            this.label3.Size = new System.Drawing.Size(56, 13);
             this.label3.TabIndex = 0;
-            this.label3.Text = "Номер вида спорта:";
+            this.label3.Text = "Фамилия";
             // 
             // button7
             // 
+            this.button7.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button7.ForeColor = System.Drawing.Color.White;
             this.button7.Location = new System.Drawing.Point(195, 438);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(119, 52);
             this.button7.TabIndex = 6;
-            this.button7.Text = "Удалить соревнования без вида спорта";
-            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Text = "многострочный запрос 1";
+            this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button8
             // 
+            this.button8.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button8.ForeColor = System.Drawing.Color.White;
             this.button8.Location = new System.Drawing.Point(479, 438);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(139, 52);
             this.button8.TabIndex = 7;
-            this.button8.Text = "Обновить имя цветковой";
-            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Text = "удаление 1";
+            this.button8.UseVisualStyleBackColor = false;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // button9
             // 
+            this.button9.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.button9.ForeColor = System.Drawing.Color.White;
             this.button9.Location = new System.Drawing.Point(810, 438);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(131, 51);
             this.button9.TabIndex = 8;
-            this.button9.Text = "Добавить тренеров в спортсменов";
-            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Text = "обновление 1";
+            this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // QueryAndFromsFrom

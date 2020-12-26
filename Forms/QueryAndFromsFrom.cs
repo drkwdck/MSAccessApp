@@ -141,7 +141,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("Спортсмен по номеру команды")) { return; }
+            if (!IsQueryExist("кол-во студентов в группе")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -149,7 +149,7 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = $"SELECT * FROM Спортсмен WHERE Спортсмен.[Идентификатор команды]= {textBox1.Text}; ";
+                    var stringQuery = $"SELECT [Количество студентов] from Группа where [Номер группы]={ textBox1.Text}; ";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
@@ -167,7 +167,7 @@ namespace MSAccessApp.Forms
                         result += "\n";
                     }
 
-                    MessageBox.Show($"Спортсмен по номеру команды:\n{result}");
+                    MessageBox.Show($"Кол-во студентов в группе:\n{result}");
                 }
                 catch
                 {
@@ -231,7 +231,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("Кол-во соревнований по виду спорта")) { return; }
+            if (!IsQueryExist("поиск по фамилии")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -239,7 +239,7 @@ namespace MSAccessApp.Forms
             {
                 try
                 {
-                    var stringQuery = $"SELECT COUNT(*) AS [Кол-во соревнований] FROM Соревнование WHERE[Идентификатор вида спорта] = {textBox3.Text}; ";
+                    var stringQuery = $" SELECT Имя from Студент where Фамилия='{ textBox3.Text}'; ";
                     var adapter = new OleDbDataAdapter(stringQuery, connection);
                     var dataSet = new DataSet();
 
@@ -257,7 +257,7 @@ namespace MSAccessApp.Forms
                         result += "\n";
                     }
 
-                    MessageBox.Show($"Кол-во соревнований по виду спорта:\n{result}");
+                    MessageBox.Show($"Студенты с заданной фамилией:\n{result}");
                 }
                 catch
                 {
@@ -275,7 +275,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("6_delete_1")) { return; }
+            if (!IsQueryExist("многострочный запрос 1")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -286,7 +286,7 @@ namespace MSAccessApp.Forms
                     connection.Open();
                     var cmd = new OleDbCommand();
                     cmd.Connection = connection;
-                    cmd.CommandText = "DELETE * FROM Соревнование WHERE[Идентификатор вида спорта] IS NULL;";
+                    cmd.CommandText = "INSERT INTO Факультет(Факультет, [Идентификатор факультета] ) SELECT Группа.Факультет, Группа.[Номер группы] FROM Группа; ";
                     cmd.ExecuteNonQuery();
                 }
                 catch
@@ -301,7 +301,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("Обновить имя цветковой")) { return; }
+            if (!IsQueryExist("удаление 1")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -312,7 +312,7 @@ namespace MSAccessApp.Forms
                     connection.Open();
                     var cmd = new OleDbCommand();
                     cmd.Connection = connection;
-                    cmd.CommandText = "UPDATE Спортсмен SET Фамилия = 'Фамилия после адпейта' WHERE Фамилия = 'Цветкова';";
+                    cmd.CommandText = "DELETE * FROM Факультет WHERE[Идентификатор факультета] = 56; ";
                     cmd.ExecuteNonQuery();
                 }
                 catch
@@ -327,7 +327,7 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
-            if (!IsQueryExist("6_hart_insert_1")) { return; }
+            if (!IsQueryExist("обновление 1")) { return; }
 
             var connectionsString = ConfigurationManager.ConnectionStrings["Database"];
 
@@ -338,7 +338,7 @@ namespace MSAccessApp.Forms
                     connection.Open();
                     var cmd = new OleDbCommand();
                     cmd.Connection = connection;
-                    cmd.CommandText = "INSERT INTO Спортсмен ( Фамилия ) SELECT Тренер FROM Команда;";
+                    cmd.CommandText = "UPDATE Факультет SET Факультет = 'ИБ' WHERE[Идентификатор факультета] = 500;" ;
                     cmd.ExecuteNonQuery();
                 }
                 catch
@@ -346,6 +346,11 @@ namespace MSAccessApp.Forms
                     MessageBox.Show("Попробуйте снова.");
                 }
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
