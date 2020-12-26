@@ -16,15 +16,28 @@ namespace MSAccessApp.Forms
         private List<RadioButton> _tablesRadioButtons = new List<RadioButton>();
         private Button _deleteEntityButton;
         private GroupBox _inputEntityId;
+        private Button _closeButton = new Button();
 
         public RemoveEntityFromTableForm(IDatabaseProvider databaseProvider)
         {
+            this.BackColor = Color.DarkOliveGreen;
+            _closeButton.Location = new Point(30, 350);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            _closeButton.Text = "В главное меню";
+
             _databaseProvider = databaseProvider;
             InitializeComponent();
             _deleteEntityButton = new Button();
             _deleteEntityButton.Text = "Удалить";
+            _deleteEntityButton.ForeColor = Color.White;
             _deleteEntityButton.Location = new Point(650, 70);
             _deleteEntityButton.Click += HandleOnSumbit;
+            _deleteEntityButton.BackColor = Color.DarkSeaGreen;
             Controls.Add(_deleteEntityButton);
             _deleteEntityButton.Hide();
             PrintTablesList();
@@ -35,6 +48,7 @@ namespace MSAccessApp.Forms
             var tables = _databaseProvider.GetTables();
             var groupBox = new GroupBox();
             groupBox.Text = "Выберите таблицу";
+            groupBox.ForeColor = Color.White;
             groupBox.Location = new Point(30, 70);
             groupBox.Size = new Size(220, (tables.Count + 2) * 20);
 
@@ -44,6 +58,7 @@ namespace MSAccessApp.Forms
                 var button = new RadioButton();
                 button.Location = new Point(31, y);
                 button.Name = tableName;
+                button.ForeColor = Color.White;
                 button.Text = tableName;
                 button.CheckedChanged += HandleTablesCheckedChanged;
 
@@ -72,6 +87,7 @@ namespace MSAccessApp.Forms
 
                 var groupBox = new GroupBox();
                 groupBox.Text = "Введите Id записи, которую необходимо удалить";
+                groupBox.ForeColor = Color.White;
                 groupBox.Location = new Point(300, 70);
                 groupBox.Size = new Size(300, 70);
                 var input = new TextBox();

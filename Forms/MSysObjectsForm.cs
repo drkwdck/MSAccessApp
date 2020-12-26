@@ -11,9 +11,19 @@ namespace MSAccessApp.Forms
         private readonly IDatabaseProvider _databaseProvider;
         private readonly int _listViewWidth = (int)(799 * 2);
         private readonly int _listViewHieght = (int)(469 * 2);
+        private readonly Button _closeButton = new Button();
 
         public MSysObjectsForm(IDatabaseProvider dataBaseProvider)
         {
+            _closeButton.Location = new Point(30, _listViewHieght + 20);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Text = "В главное меню";
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            this.BackColor = Color.DarkOliveGreen;
             _databaseProvider = dataBaseProvider;
             InitializeComponent();
             ShowMSysObjectsTable();
@@ -59,7 +69,7 @@ namespace MSAccessApp.Forms
             listView.View = View.Details;
             listView.FullRowSelect = true;
             listView.GridLines = true;
-            listView.Location = new Point(10, 10);
+            listView.Location = new Point(30, 10);
             listView.Size = new Size(_listViewWidth, _listViewHieght);
         }
     }

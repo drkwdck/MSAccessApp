@@ -16,14 +16,25 @@ namespace MSAccessApp.Forms
         private List<RadioButton> _tablesRadioButtons = new List<RadioButton>();
         private Button _editEntityButton;
         private GroupBox _currentInputs;
-
+        private Button _closeButton = new Button();
         public EditEntityFromTableForm(IDatabaseProvider databaseProvider)
         {
+            this.BackColor = Color.DarkOliveGreen;
+            _closeButton.Location = new Point(30, 350);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            _closeButton.Text = "В главное меню";
             _databaseProvider = databaseProvider;
             InitializeComponent();
             _editEntityButton = new Button();
             _editEntityButton.Hide();
+            _editEntityButton.ForeColor = Color.White;
             _editEntityButton.Text = "Редактировать";
+            _editEntityButton.BackColor = Color.DarkSeaGreen;
             _editEntityButton.Location = new Point(650, 75);
             _editEntityButton.Click += HandleOnSumbit;
             _editEntityButton.Size = new Size(100, 40);
@@ -36,15 +47,18 @@ namespace MSAccessApp.Forms
             var tables = _databaseProvider.GetTables();
             var groupBox = new GroupBox();
             groupBox.Text = "Выберите таблицу";
+            groupBox.ForeColor = Color.White;
             groupBox.Location = new Point(30, 70);
             groupBox.Size = new Size(220, (tables.Count + 2) * 20);
 
             var y = 20;
+
             foreach (var tableName in tables)
             {
                 var button = new RadioButton();
                 button.Location = new Point(31, y);
                 button.Name = tableName;
+                button.ForeColor = Color.White;
                 button.Text = tableName;
                 button.CheckedChanged += HandleTablesCheckedChanged;
 
@@ -72,6 +86,7 @@ namespace MSAccessApp.Forms
                 _editEntityButton.Show();
                 var groupBox = new GroupBox();
                 groupBox.Text = "Заполните поля, которые необходимо обновить";
+                groupBox.ForeColor = Color.White;
                 (var rows, var columns) = _databaseProvider.GetRowsFromTable(button.Name);
                 groupBox.Location = new Point(300, 70);
                 groupBox.Size = new Size(320, (columns.Count) * 40 + 40);
