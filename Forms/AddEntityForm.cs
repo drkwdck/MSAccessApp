@@ -15,17 +15,29 @@ namespace MSAccessApp.Forms
         private List<RadioButton> _tablesRadioButtons = new List<RadioButton>();
         private Button _addEntityButton;
         private GroupBox _currentInputs;
+        private Button _closeButton = new Button();
 
         public AddEntityForm(IDatabaseProvider databaseProvider)
         {
+            this.BackColor = Color.DarkOliveGreen;
             _dataBaseProvider = databaseProvider;
             InitializeComponent();
             _addEntityButton = new Button();
             _addEntityButton.Hide();
             _addEntityButton.Text = "Добавить";
+            _addEntityButton.BackColor = Color.DarkSeaGreen;
+            _addEntityButton.ForeColor = Color.White;
             _addEntityButton.Location = new Point(650, 75);
             _addEntityButton.Click += HandleOnSumbit;
             Controls.Add(_addEntityButton);
+            _closeButton.Location = new Point(30, 350);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            _closeButton.Text = "В главное меню";
             PrintTablesList();
         }
 
@@ -34,6 +46,7 @@ namespace MSAccessApp.Forms
             var tables = _dataBaseProvider.GetTables();
             var groupBox = new GroupBox();
             groupBox.Text = "Выберите таблицу";
+            groupBox.ForeColor = Color.White;
             groupBox.Location = new Point(30, 70);
             groupBox.Size = new Size(230, (tables.Count + 2) * 20);
 
@@ -45,6 +58,7 @@ namespace MSAccessApp.Forms
                 button.Size = new Size(190, 20);
                 button.Name = tableName;
                 button.Text = tableName;
+                button.ForeColor = Color.White;
                 button.CheckedChanged += HandleTablesCheckedChanged;
 
                 groupBox.Controls.Add(button);
@@ -71,6 +85,7 @@ namespace MSAccessApp.Forms
                 _addEntityButton.Show();
                 var groupBox = new GroupBox();
                 groupBox.Text = "Заполните поля новой записи";
+                groupBox.ForeColor = Color.White;
                 (var rows, var columns) = _dataBaseProvider.GetRowsFromTable(button.Name);
                 groupBox.Location = new Point(300, 70);
                 groupBox.Size = new Size(320, (columns.Count) * 40 + 40);

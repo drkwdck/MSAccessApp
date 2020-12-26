@@ -14,9 +14,10 @@ namespace MSAccessApp.Forms
 
         private readonly IDatabaseProvider _databaseProvider;
 
-        private readonly int _listViewWidth = 799;
+        private readonly int _listViewWidth = 699;
         private readonly int _listViewHieght = 469;
         private readonly Dictionary<Button, EventHandler> _clickHandlerOnButton = new Dictionary<Button, EventHandler>();
+        private readonly Button _closeButton = new Button();
 
         #endregion
 
@@ -24,8 +25,17 @@ namespace MSAccessApp.Forms
 
         public AllEntitiesFromTableForm(IDatabaseProvider databaseProvider)
         {
+            this.BackColor = Color.DarkOliveGreen;
             _databaseProvider = databaseProvider;
             InitializeComponent();
+            _closeButton.Location = new Point(10, 550);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            _closeButton.Text = "В главное меню";
             InitializeSelectTableButtons();
         }
 
@@ -33,13 +43,13 @@ namespace MSAccessApp.Forms
 
         #region Private methods
 
-
         /// <summary>
         /// Создает кнопки для показа содержиого таблиц и ставит на них обработчики
         /// </summary>
         private void InitializeSelectTableButtons()
         {
-            var x = 20;
+
+            var x = 10;
             var y = 20;
             var buttonCounter = 0;
 
@@ -49,6 +59,7 @@ namespace MSAccessApp.Forms
                 showTableButton.Text = tableTitle;
                 showTableButton.Location = new Point(x, y);
                 showTableButton.Size = new Size(_listViewWidth / 5, 40);
+                showTableButton.BackColor = Color.DarkSeaGreen;
 
                 var onButtonClickHandler = CreateButtonOnClickHandler(tableTitle);
                 showTableButton.Click += onButtonClickHandler;
@@ -57,13 +68,13 @@ namespace MSAccessApp.Forms
                 Controls.Add(showTableButton);
                 showTableButton.Show();
 
-                x += (_listViewWidth / 5) + 50;
+                x += (_listViewWidth / 7) + 50;
 
                 // В строку влезает 5 кнопок
-                if (++buttonCounter % 5 == 0)
+                if (++buttonCounter % 2 == 0)
                 {
-                    y += 50;
-                    x = 20;
+                    y += _listViewHieght / 4;
+                    x = 10;
                 }
             }
         }
@@ -122,7 +133,7 @@ namespace MSAccessApp.Forms
             listView.View = View.Details;
             listView.FullRowSelect = true;
             listView.GridLines = true;
-            listView.Location = new Point(69, 150);
+            listView.Location = new Point(320, 20);
             listView.Size = new Size(_listViewWidth, _listViewHieght);
             listView.LostFocus += HandleLostFocus;
 

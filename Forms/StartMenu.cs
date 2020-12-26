@@ -1,5 +1,6 @@
 ﻿using MSAccessApp.Persistence;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace MSAccessApp.Forms
@@ -10,6 +11,7 @@ namespace MSAccessApp.Forms
 
         public StartMenu(IDatabaseProvider databaseProvider)
         {
+            this.BackColor = Color.DarkOliveGreen;
             _databaseProvider = databaseProvider;
             InitializeComponent();
         }
@@ -19,6 +21,15 @@ namespace MSAccessApp.Forms
             var button = sender as Button;
 
             if (button == null) { return; }
+
+            AllEntitiesFromTableFormButton.BackColor = Color.DarkSeaGreen;
+            AddEntityFormButton.BackColor = Color.DarkSeaGreen;
+            RemoveEntityFromTableFormButton.BackColor = Color.DarkSeaGreen;
+            EditEntityFromTableFormButton.BackColor = Color.DarkSeaGreen;
+            MSysObjectsFormsButton.BackColor = Color.DarkSeaGreen;
+            QueryAndFromsFromButton.BackColor = Color.DarkSeaGreen;
+
+            button.BackColor = Color.LimeGreen;
 
             // TODO вычислять имена кнопок налету через nameof([класс формы])
             Form form = button.Name switch
