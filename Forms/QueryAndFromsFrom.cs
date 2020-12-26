@@ -3,6 +3,7 @@ using System;
 using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -11,9 +12,18 @@ namespace MSAccessApp.Forms
     public partial class QueryAndFromsFrom : Form
     {
         private readonly IDatabaseProvider _databaseProvider;
+        private Button _closeButton = new Button();
 
         public QueryAndFromsFrom(IDatabaseProvider databaseProvider)
         {
+            _closeButton.Location = new Point(10, 550);
+            _closeButton.Size = new Size(100, 50);
+            _closeButton.Show();
+            _closeButton.BackColor = Color.DarkSeaGreen;
+            _closeButton.ForeColor = Color.White;
+            _closeButton.Click += (_, __) => this.Close();
+            Controls.Add(_closeButton);
+            _closeButton.Text = "В главное меню";
             _databaseProvider = databaseProvider;
             InitializeComponent();
         }
